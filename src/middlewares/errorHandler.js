@@ -1,5 +1,12 @@
 const { StatusCodes } = require('http-status-codes');
+
+const {
+  CustomAPIError
+} = require('../errors');
+
 const errorHandlerMiddleware = (err, req, res, next) => {
+  if (!(err instanceof CustomAPIError))
+    return res.status(StatusCodes.NOT_FOUND).json({ msg: 'Not found' });
   console.log(err);
   let customError = {
     statusCode: err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
