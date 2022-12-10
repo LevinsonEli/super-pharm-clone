@@ -3,7 +3,7 @@ const validator = require('validator');
 
 const { CustomAPIError, NotFoundError, BadRequestError } = require('../errors');
 
-const productsValidator = {
+const usersValidator = {
   id: {
     validate: function (input) {
       return mongooseObjectId.isValid(input);
@@ -45,9 +45,9 @@ const productsValidator = {
     validate: function (input) {
       //   if (!input && this.isRequred) return false;
       //   if (!validator.isEmail(input)) return false;
-      //   return true;
+        return true;
     },
-    errorMsg: "'email' property must be valid email",
+    errorMsg: "'password' must be at least n characters, contain upercase and symbol",
     throwError: function () {
       throw new BadRequestError(this.errorMsg);
     },
@@ -73,4 +73,4 @@ const productsValidator = {
   },
 };
 
-module.exports = productsValidator;
+module.exports = usersValidator;
