@@ -17,7 +17,7 @@ const productsValidator = require('../../validators/products.validator');
 const paginationValidator = require('../../validators/pagination.validator');
 
 const httpGetAllProducts = async (req, res) => {
-
+try {
   const { search, status, sort } = req.query;
   productsValidator.validate({ status, sort });
   let { page, limit } = req.query;
@@ -30,17 +30,20 @@ const httpGetAllProducts = async (req, res) => {
   const products = await getAllProducts(skip, limit, { search, status, sort });
   const productsCount = await getTotalCount({ search, status });
 
-  res.status(200).json({ 
+  res.status(200).json({
     data: { products },
     paging: {
-      next: getNextPageUrl(req.baseUrl, productsCount, page, limit),
-      previous: getPreviousPageUrl(req.baseUrl, productsCount, skip, limit),
+      next: getNextPageUrl(req.baseUrl, productsCount, { page, limit, search, status, sort, }),
+      previous: getPreviousPageUrl(req.baseUrl, productsCount, { page, limit, search, status, sort, }),
       totalItems: productsCount,
-      totalPages: Math.ceil(productsCount/limit),
-      pageNumber: page, 
-      pageItems: products.length
-    } 
+      totalPages: Math.ceil(productsCount / limit),
+      pageNumber: page,
+      pageItems: products.length,
+    },
   });
+} catch (err) {
+  console.log(err);
+}
 };
 
 const httpCreateProduct = async (req, res) => {
@@ -79,16 +82,38 @@ const httpDeleteProduct = async (req, res) => {
   res.status(200).json(deletedProduct);
 };
 
-function getNextPageUrl(baseUrl, totalCount, page, limit) {
-  if (page * (limit + 1) >= totalCount) return '';
+function getNextPageUrl(baseUrl, totalCount, { page, limit, search, status, sort }) {
+  let nextPageUrl = baseUrl + '?';
+  if (page * (limit + 1) < totalCount)
+    nextPageUrl += `&page=${page + 1}`;
 
-  return `${baseUrl}?page=${page + 1}&limit=${limit}`;
+  nextPageUrl += `&limit=${limit}`;
+
+  if (search)
+    nextPageUrl += `&search=${search}`;
+  if (status)
+    nextPageUrl += `&status=${status}`;
+  if (sort)
+    nextPageUrl += `&sort=${sort}`;
+
+  return nextPageUrl;
 }
 
-function getPreviousPageUrl(baseUrl, totalCount, page, limit) {
-  if (page <= 0 || page * (limit + 1) >= totalCount) return '';
+function getPreviousPageUrl(baseUrl, totalCount, { page, limit, search, status, sort }) {
+  let previousPageUrl = baseUrl + '?';
+  if (page > 0 && page * (limit + 1) < totalCount)
+    previousPageUrl += `&limit=${limit}`;
 
-  return `${baseUrl}?page=${page - 1}&limit=${limit}`;
+  previousPageUrl += `&page=${page + 1}`;  
+
+  if (search) 
+    previousPageUrl += `&search=${search}`;
+  if (status) 
+    previousPageUrl += `&status=${status}`;
+  if (sort) 
+    previousPageUrl += `&sort=${sort}`;
+
+  return previousPageUrl;
 }
 
 module.exports = {

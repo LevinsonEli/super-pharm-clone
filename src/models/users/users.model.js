@@ -6,12 +6,12 @@ const {
 } = require('../../errors');
 
 async function register(name, email, password, role) {
-  const createdUser = await usersMongo.create({ name, email, password, role });
+  const createdUser = await usersMongo.create({ name, email, password, role }).select('-password');
   return createdUser;
 }
 
 async function getUserByEmail(email) {
-  return await usersMongo.findOne({ email });
+  return await usersMongo.findOne({ email }).select('-password');
 }
 
 async function isExist(email) {
@@ -60,11 +60,13 @@ async function getUser(id) {
 
 async function updateUser(id, name, role) {
     console.log(id);
-  const updatedUser = await usersMongo.findOneAndUpdate(
-    { _id: id },
-    { name, role },
-    { returnDocument: 'after', runValidators: true }
-  );
+  const updatedUser = await usersMongo
+    .findOneAndUpdate(
+      { _id: id },
+      { name, role },
+      { returnDocument: 'after', runValidators: true }
+    )
+    .select('-password');
 
   if (!updatedUser) throw new NotFoundError('User not found');
 

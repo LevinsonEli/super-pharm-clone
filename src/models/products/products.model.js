@@ -11,7 +11,9 @@ async function getAllProducts(skip, limit, queryObject) {
   
   const filterObject = getFilterObject(queryObject);
 
-  let result = productsMongo.find(filterObject);
+  let result = productsMongo
+    .find(filterObject)
+    .populate({ path: 'reviews', select: 'comment rating -product' });
 
   if (sort) {
     switch(sort) {
@@ -84,6 +86,11 @@ function getFilterObject(queryObject) {
   return filterObject;
 }
 
+async function isExist (id) {
+  const product = await productsMongo.findOne({ _id: id });
+  return !!product;
+}
+
 module.exports = {
   getAllProducts,
   createProduct,
@@ -91,4 +98,5 @@ module.exports = {
   updateProduct,
   deleteProduct,
   getTotalCount,
+  isExist,
 };
