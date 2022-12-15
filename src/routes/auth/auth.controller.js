@@ -4,6 +4,7 @@ const {
   register,
   isExist,
   getUserByEmail,
+  isPasswordCorrect,
 } = require('../../models/users/users.model');
 const {
   CustomAPIError,
@@ -40,10 +41,10 @@ const httpLogin = async (req, res, next) => {
   usersValidator.validate({ email });
 
   const user = await getUserByEmail(email);
-  if (!user) 
+  if (!user)
     throw new BadRequestError('User not found');
   
-  const isCorrectPassword = await user.comparePassword(password);
+  const isCorrectPassword = isPasswordCorrect(user._id, password);
   if (!isCorrectPassword)
     throw new InvalidCredentials('Invalid credentials');
 

@@ -4,7 +4,8 @@ require('dotenv').config();
 
 const app = require('./app');
 
-const { mongoConnect } = require('./db/mongo');
+const { mongoConnect, } = require('./db/mongo');
+const seed = require('./db/seed');
 // const server = http.createServer(app);
 
 const PORT = process.env.PORT || 8000;
@@ -12,6 +13,8 @@ const PORT = process.env.PORT || 8000;
 async function startServer() {
   try {
     await mongoConnect();
+
+    // await seed();
 
     app.listen(PORT, () => {
       console.log(`Listening on port ${PORT}`);

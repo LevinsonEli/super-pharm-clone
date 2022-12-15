@@ -28,8 +28,8 @@ async function httpGetAllUsers(req, res) {
   res.status(StatusCodes.OK).json({
     data: { users },
     paging: {
-      next: getNextPageUrl(req.baseUrl, usersCount, page, limit),
-      previous: getPreviousPageUrl(req.baseUrl, usersCount, skip, limit),
+      next: getNextPageUrl(req.baseUrl, usersCount, { page, limit, search, sort }),
+      previous: getPreviousPageUrl(req.baseUrl, usersCount, { page, limit, search, sort }),
       totalItems: usersCount,
       totalPages: Math.ceil(usersCount / limit),
       pageNumber: page,
@@ -83,16 +83,34 @@ async function httpUpdateCurrentUserPassword(req, res) {
   res.status(StatusCodes.OK).json({ success: true });
 }
 
-function getNextPageUrl(baseUrl, totalCount, page, limit) {
-  if (page * (limit + 1) >= totalCount) return '';
+function getNextPageUrl(baseUrl, totalCount, { page, limit, search, sort }) {
+  let nextPageUrl = baseUrl + '?';
+  if (page * (limit + 1) < totalCount)
+    nextPageUrl += `&page=${page + 1}`;
 
-  return `${baseUrl}?page=${page + 1}&limit=${limit}`;
+  nextPageUrl += `&limit=${limit}`;
+
+  if (search)
+    nextPageUrl += `&search=${search}`;
+  if (sort)
+    nextPageUrl += `&sort=${sort}`;
+
+  return nextPageUrl;
 }
 
-function getPreviousPageUrl(baseUrl, totalCount, page, limit) {
-  if (page <= 0 || page * (limit + 1) >= totalCount) return '';
+function getPreviousPageUrl(baseUrl, totalCount, { page, limit, search, sort }) {
+  let previousPageUrl = baseUrl + '?';
+  if (page > 0 && page * (limit + 1) < totalCount)
+    previousPageUrl += `&limit=${limit}`;
 
-  return `${baseUrl}?page=${page - 1}&limit=${limit}`;
+  previousPageUrl += `&page=${page + 1}`;  
+
+  if (search) 
+    previousPageUrl += `&search=${search}`;
+  if (sort) 
+    previousPageUrl += `&sort=${sort}`;
+
+  return previousPageUrl;
 }
 
 module.exports = {
