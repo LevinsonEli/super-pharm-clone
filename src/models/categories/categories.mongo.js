@@ -1,18 +1,47 @@
 const mongoose = require('mongoose');
 
-const categorySchema = new mongoose.Schema({
+const categorySchema = new mongoose.Schema(
+  {
     title: {
-        type: String,
-        required: [true, 'title must be provided'],
-        maxLength: 50,
+      type: String,
+      required: [true, 'title must be provided'],
+      maxLength: 50,
     },
     description: {
-        type: String,
-        maxLength: 1000,
+      type: String,
+      maxLength: 1000,
     },
-    image: {
-        type: String,
-    }
-}, { timestamps: true });
+    thumbnailImage: {
+      type: String,
+    },
+    descriptionlImage: {
+      type: String,
+    },
+    parentCategory: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Category',
+    },
+  },
+  { 
+    timestamps: true, 
+    toJSON: { virtuals: true }, 
+    toObject: { virtuals: true } }
+);
+
+categorySchema.virtual('childCategories', {
+  ref: 'Category',
+  localField: '_id',
+  foreignField: 'parentCategory',
+  justOne: false,
+});
+
+const autoPopulateChildren = function (next) {
+  this.populate('childCategories')
+  next();
+};
+
+categorySchema
+  .pre('findOne', autoPopulateChildren)
+  .pre('find', autoPopulateChildren);
 
 module.exports = mongoose.model('Category', categorySchema);
