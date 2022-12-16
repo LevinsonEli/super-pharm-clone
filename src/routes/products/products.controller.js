@@ -17,7 +17,6 @@ const productsValidator = require('../../validators/products.validator');
 const paginationValidator = require('../../validators/pagination.validator');
 
 const httpGetAllProducts = async (req, res) => {
-try {
   const { search, status, sort } = req.query;
   productsValidator.validate({ status, sort });
   let { page, limit } = req.query;
@@ -41,9 +40,6 @@ try {
       pageItems: products.length,
     },
   });
-} catch (err) {
-  console.log(err);
-}
 };
 
 const httpCreateProduct = async (req, res) => {
@@ -86,6 +82,8 @@ function getNextPageUrl(baseUrl, totalCount, { page, limit, search, status, sort
   let nextPageUrl = baseUrl + '?';
   if (page * (limit + 1) < totalCount)
     nextPageUrl += `&page=${page + 1}`;
+  else
+    return '';
 
   nextPageUrl += `&limit=${limit}`;
 
@@ -103,6 +101,8 @@ function getPreviousPageUrl(baseUrl, totalCount, { page, limit, search, status, 
   let previousPageUrl = baseUrl + '?';
   if (page > 0 && page * (limit + 1) < totalCount)
     previousPageUrl += `&limit=${limit}`;
+  else
+    return '';
 
   previousPageUrl += `&page=${page + 1}`;  
 

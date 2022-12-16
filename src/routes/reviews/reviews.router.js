@@ -16,7 +16,7 @@ const {
 router.get('/', httpGetAllReviews);
 router.get('/:id', httpGetReview);
 router.post('/', authenticateUser, httpCreateReview);
-router.patch('/:id', httpUpdateReview);
-router.delete('/:id', httpDeleteReview);
+router.patch('/:id', authenticateUser, httpUpdateReview);
+router.delete('/:id', authenticateUser, httpDeleteReview);
 
 module.exports = router;
