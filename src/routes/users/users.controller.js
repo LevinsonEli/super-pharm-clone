@@ -87,6 +87,8 @@ function getNextPageUrl(baseUrl, totalCount, { page, limit, search, sort }) {
   let nextPageUrl = baseUrl + '?';
   if (page * (limit + 1) < totalCount)
     nextPageUrl += `&page=${page + 1}`;
+  else
+    return '';
 
   nextPageUrl += `&limit=${limit}`;
 
@@ -102,6 +104,8 @@ function getPreviousPageUrl(baseUrl, totalCount, { page, limit, search, sort }) 
   let previousPageUrl = baseUrl + '?';
   if (page > 0 && page * (limit + 1) < totalCount)
     previousPageUrl += `&limit=${limit}`;
+  else
+    return '';
 
   previousPageUrl += `&page=${page + 1}`;  
 

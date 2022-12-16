@@ -6,7 +6,7 @@ const {
 } = require('../../errors');
 
 async function getAllSubcategories(categoryId) {
-
+  
   return await categoriesMongo.find({});
 }
 

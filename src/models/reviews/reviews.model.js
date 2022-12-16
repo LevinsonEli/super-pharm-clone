@@ -6,8 +6,12 @@ const {
   BadRequestError,
 } = require('../../errors');
 
-async function getAllReviews (productId) {
-    const reviews = await reviewsMongo.find({ product: productId }).populate({ path: 'product', select: 'title' });
+async function getAllReviews (productId, skip, limit) {
+    const reviews = await reviewsMongo
+      .find({ product: productId })
+      .populate({ path: 'product', select: 'title' })
+      .skip(skip)
+      .limit(limit);
     return reviews;
 }
 
@@ -50,6 +54,12 @@ async function isUserhasReviewForProduct (userId, productId) {
     return !!review;
 }
 
+async function getTotalCount (productId) {
+  const result = reviewsMongo.find({ product: productId });
+
+  return await result.countDocuments();
+}
+
 module.exports = {
   getAllReviews,
   getReview,
@@ -57,4 +67,5 @@ module.exports = {
   updateReview,
   deleteReview,
   isUserhasReviewForProduct,
+  getTotalCount,
 };
