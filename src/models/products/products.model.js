@@ -1,4 +1,5 @@
 const productsMongo = require('./products.mongo');
+const { deleteReviewsOfProduct } = require('../reviews/reviews.model');
 const {
   CustomAPIError,
   NotFoundError,
@@ -58,6 +59,8 @@ async function deleteProduct (id) {
 
   if (!deletedProduct)
     throw new NotFoundError('Product not found');
+
+  await deleteReviewsOfProduct(id);
 
   return deletedProduct;
 }
