@@ -9,6 +9,7 @@ const {
   httpDeleteCategory,
 } = require('./categories.controller');
 
+
 router.route('/').get(httpGetAllCategories).post(httpCreateCategory);
 router
   .route('/:id')
