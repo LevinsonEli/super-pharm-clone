@@ -46,6 +46,41 @@ The original one you can see at [shop.super-pharm.co.il][super-pharm-original]
     - Product - the id of the related product
     - User - the id of the user
 
+## v0.1
+
+- **Added 'users'.**
+  - The Router itself was created. 
+  - All 'CRUD' operations avalable for users.
+
+## v0.0
+
+- **Added 'auth'.**
+  - Login, Logout, Register endpoints.
+  - Passwords secured by bcrypt library.
+  - 'Authenticate User' and 'Authorize Permissions' middlewares.
+
+- **Added 'products'**
+  - Full 'CRUD' operations
+  - Every product contains:
+    - Title
+    - Price
+
+- **Initial setup was created**
+  - Created [NodeJS][node-js] project
+  - Using [Express][express] library for server
+  - Using [MongoDB][mongo] + [Mongoose][mongoose] for DB
+  - Initialized [Docker][docker] file
+  - Created pipeline using GitHub Actions (GitHub Workflow)
+  - Using [Jest][jest] for testing
+
 
 [super-pharm-original]: https://shop.super-pharm.co.il/
 [stripe]: https://stripe.com/
+[node-js]: https://nodejs.org/en/
+[express]: https://expressjs.com/
+[mongo]: https://www.mongodb.com/
+[mongoose]: https://mongoosejs.com/
+[docker]: https://www.docker.com/
+[jest]: https://jestjs.io/
+
+
