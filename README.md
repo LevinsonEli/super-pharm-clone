@@ -4,21 +4,21 @@ The original one you can see at [shop.super-pharm.co.il][super-pharm-original]
 
 ## v0.2
 
-* **Added 'orders'.**
-** You can create an order and pay for it using [Stripe][stripe]
-** For every cart item 'product id' and 'amount' should be provided. All the product fields are gained from the DB and stored as order item inside order.
-** Every order contains:
-*** Tax, Shipping Fee, Sub Total, Total
-*** Items - list of order items. Every item contains:
-**** Title
-**** Price
-**** Amount
-**** Image
-**** Amount
-**** Product - the is of related product
-*** User - the id of related user
-*** Client Secret, Paiment Intent Id - for Stripe API
-*** Status
+ **Added 'orders'.**
+  - You can create an order and pay for it using [Stripe][stripe]
+  - For every cart item 'product id' and 'amount' should be provided. All the product fields are gained from the DB and stored as order item inside order.
+  - Every order contains:
+    - Tax, Shipping Fee, Sub Total, Total
+    - Items - list of order items. Every item contains:
+      - Title
+      - Price
+      - Amount
+      - Image
+      - Amount
+      - Product - the is of related product
+    - User - the id of related user
+    - Client Secret, Paiment Intent Id - for Stripe API
+    - Status
 
 * **Added 'statistics'.**
 ** Every product have new fileds:
