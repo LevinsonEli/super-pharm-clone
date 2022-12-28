@@ -47,10 +47,25 @@ async function deleteCategory(id) {
   return category;
 }
 
-module.exports = {
-    getAllCategories,
-    getCategory,
-    createCategory,
-    updateCategory,
-    deleteCategory,
+async function isExist (id) {
+    const foundCategory = await categoriesMongo.findOne({ _id: id });
+    return !!foundCategory;
 }
+
+async function categoryCanDeriveProducts (id) {
+    const foundCategory = await categoriesMongo.findOne({ _id: id });
+
+    if (foundCategory.childCategories && foundCategory.childCategories.length > 0)
+        return false;
+    return true;
+}
+
+module.exports = {
+  getAllCategories,
+  getCategory,
+  createCategory,
+  updateCategory,
+  deleteCategory,
+  isExist,
+  categoryCanDeriveProducts,
+};

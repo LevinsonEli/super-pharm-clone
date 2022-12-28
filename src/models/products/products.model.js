@@ -14,7 +14,8 @@ async function getAllProducts(skip, limit, queryObject) {
 
   let result = productsMongo
     .find(filterObject)
-    .populate({ path: 'reviews', select: 'comment rating -product' });
+    .populate({ path: 'reviews', select: 'comment rating' })
+    .populate({ path: 'category', select: 'title' });
 
   if (sort) {
     switch(sort) {
@@ -30,8 +31,8 @@ async function getAllProducts(skip, limit, queryObject) {
   return await result.skip(skip).limit(limit);
 }
 
-async function createProduct (title, price) {
-  return await productsMongo.create({ title, price });
+async function createProduct(title, price, category) {
+  return await productsMongo.create({ title, price, category });
 }
 
 async function getProduct (id) {
@@ -41,10 +42,10 @@ async function getProduct (id) {
   return foundProduct;
 }
 
-async function updateProduct (id, title, price, status) {
+async function updateProduct (id, title, price, status, category) {
   const updatedProduct = await productsMongo.findOneAndUpdate(
     { _id: id },
-    { title, price, status },
+    { title, price, status, category },
     { returnDocument: 'after', runValidators: true }
   );
 
