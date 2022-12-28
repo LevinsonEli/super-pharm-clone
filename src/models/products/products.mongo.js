@@ -26,10 +26,15 @@ const productSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    category: {
+      required: [true, 'Product must be related to a category'],
+      type: mongoose.Schema.ObjectId,
+      ref: 'Category',
+    },
   },
-  { 
-    timestamps: true, 
-    toJSON: { virtuals: true }, 
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
     toObject: { virtuals: true },
   }
 );
@@ -40,5 +45,11 @@ productSchema.virtual('reviews', {
   foreignField: 'product',
   justOne: false,
 });
+
+// productSchema.virtual('category', {
+//   ref: 'Category',
+//   localField: '_id',
+//   foreignField: 'category',
+// })
 
 module.exports = mongoose.model('Product', productSchema);

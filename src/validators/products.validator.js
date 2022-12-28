@@ -38,8 +38,7 @@ const productsValidator = {
   },
   status: {
     validate: function (input) {
-      if (!input)
-        return true;
+      if (!input) return true;
       return input == 'true' || input == 'false';
     },
     errorMsg: 'Status must true or false',
@@ -57,6 +56,15 @@ const productsValidator = {
       "'sort' can be one of ['latest', 'oldest', 'latestEdit', 'oldestEdit', 'a-z', 'z-a']",
     throwError: function () {
       throw new BadRequestError(this.errorMsg);
+    },
+  },
+  category: {
+    validate: function (input) {
+      return mongooseObjectId.isValid(input);
+    },
+    errorMsg: 'Category not found',
+    throwError: function () {
+      throw new NotFoundError(this.errorMsg);
     },
   },
   validate: function (input) {

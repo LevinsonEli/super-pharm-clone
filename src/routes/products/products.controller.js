@@ -9,6 +9,10 @@ const {
   getTotalCount,
 } = require('../../models/products/products.model');
 const {
+  isExist,
+  categoryCanDeriveProducts,
+} = require('../../models/categories/categories.model');
+const {
   CustomAPIError,
   NotFoundError,
   BadRequestError,
@@ -43,10 +47,18 @@ const httpGetAllProducts = async (req, res) => {
 };
 
 const httpCreateProduct = async (req, res) => {
-  const { title, price } = req.body;
-  productsValidator.validate({ title, price });
+  const { title, price, category } = req.body;
+  productsValidator.validate({ title, price, category });
 
-  const createdProduct = await createProduct(title, price);
+  const isCategoryExist = await isExist(category);
+  if (!isCategoryExist) 
+    throw new BadRequestError('Category not found');
+
+  const isLegalGategory = await categoryCanDeriveProducts(category);
+  if (!isLegalGategory)
+    throw new BadRequestError('Cannot relate product to a parent category');
+
+  const createdProduct = await createProduct(title, price, category);
   res.status(201).json(createdProduct);
 };
 
@@ -63,10 +75,17 @@ const httpGetProduct = async (req, res) => {
 const httpUpdateProduct = async (req, res) => {
 
   const { id } = req.params;
-  const { title, price, status } = req.body;
-  productsValidator.validate({ id, title, price, status });
+  const { title, price, status, category } = req.body;
+  productsValidator.validate({ id, title, price, status, category });
 
-  const updatedProduct = await updateProduct(id, title, price, status);
+  const isCategoryExist = await isExist(category);
+  if (!isCategoryExist) throw new BadRequestError('Category not found');
+
+  const isLegalGategory = await categoryCanDeriveProducts(category);
+  if (!isLegalGategory)
+    throw new BadRequestError('Cannot relate product to a parent category');
+
+  const updatedProduct = await updateProduct(id, title, price, status, category);
 
   res.status(200).json(updatedProduct);
 };
