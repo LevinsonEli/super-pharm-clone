@@ -14,7 +14,7 @@ const categorySchema = new mongoose.Schema(
     thumbnailImage: {
       type: String,
     },
-    descriptionlImage: {
+    descriptionImage: {
       type: String,
     },
     parentCategory: {
