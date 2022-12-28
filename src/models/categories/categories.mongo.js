@@ -10,9 +10,37 @@ const categorySchema = new mongoose.Schema({
         type: String,
         maxLength: 1000,
     },
-    image: {
-        type: String,
-    }
-}, { timestamps: true });
+    thumbnailImage: {
+      type: String,
+    },
+    descriptionImage: {
+      type: String,
+    },
+    parentCategory: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Category',
+    },
+  },
+  { 
+    timestamps: true, 
+    toJSON: { virtuals: true }, 
+    toObject: { virtuals: true } }
+);
+
+categorySchema.virtual('childCategories', {
+  ref: 'Category',
+  localField: '_id',
+  foreignField: 'parentCategory',
+  justOne: false,
+});
+
+const autoPopulateChildren = function (next) {
+  this.populate('childCategories')
+  next();
+};
+
+categorySchema
+  .pre('findOne', autoPopulateChildren)
+  .pre('find', autoPopulateChildren);
 
 module.exports = mongoose.model('Category', categorySchema);
