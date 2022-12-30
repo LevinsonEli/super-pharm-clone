@@ -60,6 +60,8 @@ const productsValidator = {
   },
   category: {
     validate: function (input) {
+      if (!input)
+        throw new BadRequestError('Category required');
       return mongooseObjectId.isValid(input);
     },
     errorMsg: 'Category not found',

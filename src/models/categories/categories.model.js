@@ -7,7 +7,8 @@ const {
 
 
 async function getAllCategories() {
-  return await categoriesMongo.find({});
+  const categories = await categoriesMongo.find({});
+  return categories.filter(category => !category.parentCategory);
 }
 
 async function getCategory(id) {

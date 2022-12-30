@@ -46,10 +46,4 @@ productSchema.virtual('reviews', {
   justOne: false,
 });
 
-// productSchema.virtual('category', {
-//   ref: 'Category',
-//   localField: '_id',
-//   foreignField: 'category',
-// })
-
 module.exports = mongoose.model('Product', productSchema);

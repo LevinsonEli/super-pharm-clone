@@ -6,8 +6,13 @@ const {
 } = require('../../errors');
 
 async function register(name, email, password, role) {
-  const createdUser = await usersMongo.create({ name, email, password, role }).select('-password');
-  return createdUser;
+  const createdUser = await usersMongo.create({ name, email, password, role });
+  return {
+    _id: createdUser._id,
+    name: createdUser.name,
+    email: createdUser.email,
+    role: createdUser.role,
+  };
 }
 
 async function getUserByEmail(email) {
