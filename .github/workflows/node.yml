@@ -3,7 +3,7 @@ on:
   push:
     branches: [ master ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, v0.1, v0.2, v0.3 ]
 jobs:
   build:
     env:
@@ -26,3 +26,4 @@ jobs:
           mongodb-version: ${{ matrix.mongodb-version }}
       - run: npm install
       - run: npm run start
+      - run: npm run test
