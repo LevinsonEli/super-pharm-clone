@@ -99,8 +99,8 @@ const httpDeleteProduct = async (req, res) => {
 
 function getNextPageUrl(baseUrl, totalCount, { page, limit, search, status, sort }) {
   let nextPageUrl = baseUrl + '?';
-  if (page * (limit + 1) < totalCount)
-    nextPageUrl += `&page=${page + 1}`;
+  if (page * limit < totalCount)
+    nextPageUrl += `page=${page + 1}`;
   else
     return '';
 
@@ -118,12 +118,13 @@ function getNextPageUrl(baseUrl, totalCount, { page, limit, search, status, sort
 
 function getPreviousPageUrl(baseUrl, totalCount, { page, limit, search, status, sort }) {
   let previousPageUrl = baseUrl + '?';
-  if (page > 0 && page * (limit + 1) < totalCount)
-    previousPageUrl += `&limit=${limit}`;
+  
+  if (page > 1 && page * limit <= totalCount)
+    previousPageUrl += `page=${page - 1}`;
   else
     return '';
 
-  previousPageUrl += `&page=${page + 1}`;  
+  previousPageUrl += `&limit=${limit}`;
 
   if (search) 
     previousPageUrl += `&search=${search}`;

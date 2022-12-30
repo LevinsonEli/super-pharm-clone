@@ -25,9 +25,10 @@ const categoriesValidator = {
   },
   parentCategory: {
     validate: function (input) {
+      if (!input) return true;
       return mongooseObjectId.isValid(input);
     },
-    errorMsg: 'Review not found',
+    errorMsg: 'Category not found',
     throwError: function () {
       throw new NotFoundError(this.errorMsg);
     },
