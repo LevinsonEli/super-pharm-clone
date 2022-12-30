@@ -8,7 +8,7 @@ jobs:
   build:
     env:
       CI: true
-      MONGO_URI_TEST: mongodb://localhost/super-pharm-clone
+      MONGO_URI: mongodb://localhost/super-pharm-clone
     strategy:
       matrix:
         node-version: [14.x, 16.x]
