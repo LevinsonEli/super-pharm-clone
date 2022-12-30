@@ -24,12 +24,12 @@ describe('Testing categories API', () => {
   beforeAll(async () => {
     await mongoose.connect(DB_URI);
     await categoriesMongo.deleteMany();
-  }, 10000);
+  }, 20000);
 
   afterAll(async () => {
     await categoriesMongo.deleteMany();
     await mongoose.disconnect();
-  }, 10000);
+  }, 20000);
 
   describe(`Testing POST ${API_URL}/categories`, () => {
     it(`Should respond with 201, created category`, async () => {

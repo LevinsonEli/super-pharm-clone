@@ -68,13 +68,13 @@ describe('Testing Products API', () => {
     testProductWithoutTitle.category = childCategory1._id.toString();
     testProductWithoutPrice.category = childCategory1._id.toString();
     testProductWithIllegalCategory.category = parentCategory._id.toString();
-  }, 10000);
+  }, 20000);
 
   afterAll(async () => {
     await productsMongo.deleteMany();
     await categoriesMongo.deleteMany();
     await mongoose.disconnect();
-  });
+  }, 20000);
 
   describe(`Testing POST ${API_URL}/products`, () => {
     it('It should respond with status code 201', async () => {
