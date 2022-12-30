@@ -68,13 +68,13 @@ describe('Testing Products API', () => {
     testProductWithoutTitle.category = childCategory1._id.toString();
     testProductWithoutPrice.category = childCategory1._id.toString();
     testProductWithIllegalCategory.category = parentCategory._id.toString();
-  }, 20000);
+  }, 60000);
 
   afterAll(async () => {
     await productsMongo.deleteMany();
     await categoriesMongo.deleteMany();
     await mongoose.disconnect();
-  }, 20000);
+  }, 60000);
 
   describe(`Testing POST ${API_URL}/products`, () => {
     it('It should respond with status code 201', async () => {
@@ -86,7 +86,7 @@ describe('Testing Products API', () => {
       expect(response.body.title).toBe(testProduct.title);
       expect(response.body.price).toBe(testProduct.price);
       expect(response.body.category).toBe(testProduct.category);
-    }, 10000);
+    }, 60000);
 
     it('It should catch missing title', async () => {
       const response = await request(app)
@@ -94,7 +94,7 @@ describe('Testing Products API', () => {
         .send(testProductWithoutTitle)
         .expect('Content-Type', /json/)
         .expect(400);
-    }, 10000);
+    }, 60000);
 
     it('It should catch missing price', async () => {
       const response = await request(app)
@@ -102,7 +102,7 @@ describe('Testing Products API', () => {
         .send(testProductWithoutPrice)
         .expect('Content-Type', /json/)
         .expect(400);
-    }, 10000);
+    }, 60000);
 
     it('It should catch missing category id', async () => {
       const response = await request(app)
@@ -110,7 +110,7 @@ describe('Testing Products API', () => {
         .send(testProductWithoutCategory)
         .expect('Content-Type', /json/)
         .expect(400);
-    }, 10000);
+    }, 60000);
 
     it('It should catch invalid category id', async () => {
       const response = await request(app)
@@ -118,7 +118,7 @@ describe('Testing Products API', () => {
         .send(testProductWithInvalidCategoryId)
         .expect('Content-Type', /json/)
         .expect(404);
-    }, 10000);
+    }, 60000);
 
     it('It should catch illegal category (category that have child categories)', async () => {
       const response = await request(app)
@@ -126,7 +126,7 @@ describe('Testing Products API', () => {
         .send(testProductWithIllegalCategory)
         .expect('Content-Type', /json/)
         .expect(400);
-    }, 10000);
+    }, 60000);
   });
 
   describe(`Testing GET ${API_URL}/products/:id`, () => {
@@ -141,7 +141,7 @@ describe('Testing Products API', () => {
       expect(getProductResponse.body.title).toBe(testProduct.title);
       expect(getProductResponse.body.price).toBe(testProduct.price);
       expect(getProductResponse.body.category).toBe(testProduct.category);
-    }, 10000);
+    }, 60000);
   });
 
   describe(`Testnig GET ${API_URL}/products`, () => {
@@ -164,7 +164,7 @@ describe('Testing Products API', () => {
       expect(responseProducts[1].title).toBe(product2.title);
       expect(responseProducts[1].description).toBe(product2.description);
       expect(responseProducts[1].category._id).toBe(product2.category.toString());
-    }, 10000);
+    }, 60000);
     
     it('Should respond correctly for page + limit for first page', async () => {
       await productsMongo.deleteMany();
@@ -184,7 +184,7 @@ describe('Testing Products API', () => {
       expect(responsePaging.totalPages).toBe(2);
       expect(responsePaging.pageNumber).toBe(1);
       expect(responsePaging.pageItems).toBe(1);
-    }, 10000);
+    }, 60000);
     
     it('Should respond correctly for page + limit for last page', async () => {
       await productsMongo.deleteMany();
@@ -204,7 +204,7 @@ describe('Testing Products API', () => {
       expect(responsePaging.totalPages).toBe(2);
       expect(responsePaging.pageNumber).toBe(2);
       expect(responsePaging.pageItems).toBe(1);
-    }, 10000);
+    }, 60000);
     
     it('Should respond correctly for query sort: latest', async () => {
       await productsMongo.deleteMany();
@@ -218,7 +218,7 @@ describe('Testing Products API', () => {
       const responseProducts = getProductsResponse.body.data.products;
       expect(responseProducts[0]._id).toBe(product2._id.toString());
       expect(responseProducts[1]._id).toBe(product._id.toString());
-    }, 10000);
+    }, 60000);
     
     it('Should respond correctly for query sort: oldest', async () => {
       await productsMongo.deleteMany();
@@ -232,7 +232,7 @@ describe('Testing Products API', () => {
       const responseProducts = getProductsResponse.body.data.products;
       expect(responseProducts[0]._id).toBe(product._id.toString());
       expect(responseProducts[1]._id).toBe(product2._id.toString());
-    }, 10000);
+    }, 60000);
     
     it('Should respond correctly for query sort: latestEdit', async () => {
       await productsMongo.deleteMany();
@@ -247,7 +247,7 @@ describe('Testing Products API', () => {
       const responseProducts = getProductsResponse.body.data.products;
       expect(responseProducts[0]._id).toBe(product._id.toString());
       expect(responseProducts[1]._id).toBe(product2._id.toString());
-    }, 10000);
+    }, 60000);
     
     it('Should respond correctly for query sort: oldestEdit', async () => {
       await productsMongo.deleteMany();
@@ -262,7 +262,7 @@ describe('Testing Products API', () => {
       const responseProducts = getProductsResponse.body.data.products;
       expect(responseProducts[0]._id).toBe(product2._id.toString());
       expect(responseProducts[1]._id).toBe(product._id.toString());
-    }, 10000);
+    }, 60000);
     
     it('Should respond correctly for query sort: a-z', async () => {
       await productsMongo.deleteMany();
@@ -276,7 +276,7 @@ describe('Testing Products API', () => {
       const responseProducts = getProductsResponse.body.data.products;
       expect(responseProducts[0]._id).toBe(product._id.toString());
       expect(responseProducts[1]._id).toBe(product2._id.toString());
-    }, 10000);
+    }, 60000);
     
     it('Should respond correctly for query sort: z-a', async () => {
       await productsMongo.deleteMany();
@@ -290,7 +290,7 @@ describe('Testing Products API', () => {
       const responseProducts = getProductsResponse.body.data.products;
       expect(responseProducts[0]._id).toBe(product2._id.toString());
       expect(responseProducts[1]._id).toBe(product._id.toString());
-    }, 10000);
+    }, 60000);
     
     it('Should respond correctly for search query', async () => {
       await productsMongo.deleteMany();
@@ -303,7 +303,7 @@ describe('Testing Products API', () => {
         .expect(200);
       const responseProducts = getProductsResponse.body.data.products;
       expect(responseProducts[0]._id).toBe(product._id.toString());
-    }, 10000);
+    }, 60000);
     
     it('Should respond correctly for status query', async () => {
       await productsMongo.deleteMany();
@@ -317,7 +317,7 @@ describe('Testing Products API', () => {
         .expect(200);
       const responseProducts = getProductsResponse.body.data.products;
       expect(responseProducts[0]._id).toBe(product._id.toString());
-    }, 10000);
+    }, 60000);
   });
 
   describe(`Testing PATCH ${API_URL}/products/:id`, () => {
@@ -334,7 +334,7 @@ describe('Testing Products API', () => {
       expect(updateProductResponse.body.price).toBe(testProduct2.price);
       expect(updateProductResponse.body.status).toBe(testProduct2.status);
       expect(updateProductResponse.body.category).toBe(testProduct2.category);
-    }, 10000);
+    }, 60000);
   });
 
   describe(`Testing DELETE ${API_URL}/products/:id`, () => {
@@ -352,6 +352,6 @@ describe('Testing Products API', () => {
       expect(deleteProductResponse.body.title).toBe(testProduct.title);
       expect(deleteProductResponse.body.price).toBe(testProduct.price);
       expect(deleteProductResponse.body.category).toBe(testProduct.category);
-    }, 10000);
+    }, 60000);
   });
 });

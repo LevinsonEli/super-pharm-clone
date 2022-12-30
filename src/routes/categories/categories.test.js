@@ -24,12 +24,12 @@ describe('Testing categories API', () => {
   beforeAll(async () => {
     await mongoose.connect(DB_URI);
     await categoriesMongo.deleteMany();
-  }, 20000);
+  }, 60000);
 
   afterAll(async () => {
     await categoriesMongo.deleteMany();
     await mongoose.disconnect();
-  }, 20000);
+  }, 60000);
 
   describe(`Testing POST ${API_URL}/categories`, () => {
     it(`Should respond with 201, created category`, async () => {
@@ -41,7 +41,7 @@ describe('Testing categories API', () => {
         .expect(201);
       expect(response.body.title).toBe(testCategory.title);
       expect(response.body.description).toBe(testCategory.description);
-    }, 10000);
+    }, 60000);
 
     it(`Should catch missing title`, async () => {
       const response = await request(app)
@@ -49,7 +49,7 @@ describe('Testing categories API', () => {
         .send({})
         .expect('Content-Type', /json/)
         .expect(400);
-    }, 10000);
+    }, 60000);
 
     it(`Should successfully create shild category`, async () => {
       await categoriesMongo.deleteMany();
@@ -59,7 +59,7 @@ describe('Testing categories API', () => {
         .send({ ...testCategory2, parentCategory: parentCategory._id })
         .expect('Content-Type', /json/)
         .expect(201);
-    }, 10000);
+    }, 60000);
   });
 
   describe(`Testing GET ${API_URL}/categories/:id`, () => {
@@ -74,7 +74,7 @@ describe('Testing categories API', () => {
       expect(response.body._id).toBe(categoryId);
       expect(response.body.title).toBe(category.title);
       expect(response.body.description).toBe(category.description);
-    }, 10000);
+    }, 60000);
   });
 
   describe(`Testing GET ${API_URL}/categories`, () => {
@@ -97,7 +97,7 @@ describe('Testing categories API', () => {
       );
       expect(responseParentCategory.childCategories.length).toBe(1);
       expect(responseParentCategory.childCategories[0]._id).toBe(category2._id.toString());
-    }, 10000);
+    }, 60000);
   });
 
   describe(`Testing PATCH ${API_URL}/categories/:id`, () => {
@@ -114,7 +114,7 @@ describe('Testing categories API', () => {
     expect(response.body.title).toBe(testCategory2.title);
     expect(response.body.description).toBe(testCategory2.description);
         
-    }, 10000);
+    }, 60000);
   });
 
   describe(`Testing DELETE ${API_URL}/categories/:id`, () => {
@@ -125,6 +125,6 @@ describe('Testing categories API', () => {
         .delete(`${API_URL}/categories/${category._id.toString()}`)
         .expect('Content-Type', /json/)
         .expect(200);
-    }, 10000);
+    }, 60000);
   });
 });
