@@ -150,15 +150,11 @@ describe('Testing Products API', () => {
       await productsMongo.deleteMany();
       const product = await productsMongo.create({ ...testProduct });
       const product2 = await productsMongo.create({ ...testProduct2 });
-      console.log(`product1 : ${product}`);
-      console.log(`product2 : ${product2}`);
-      console.log(`URL : ${API_URL}/products`);
 
       const getProductsResponse = await request(app)
         .get(`${API_URL}/products`)
         .expect('Content-Type', /json/)
         .expect(200);
-      console.log(getProductsResponse.body);
       const responseProducts = getProductsResponse.body.data.products.sort((prod1, prod2) => prod1.title.localeCompare(prod2.title));
       expect(responseProducts[0]._id).toBe(product._id.toString());
       expect(responseProducts[0].title).toBe(product.title);
