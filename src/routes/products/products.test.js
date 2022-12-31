@@ -133,7 +133,9 @@ describe('Testing Products API', () => {
   describe(`Testing GET ${API_URL}/products/:id`, () => {
     it('It should respond with status 200', async () => {
       const product = await productsMongo.create({...testProduct});
+      console.log(`product : ${product}`);
       const productId = product._id.toString();
+      console.log(`URL : ${API_URL}/products/${productId}`);
 
       const getProductResponse = await request(app)
         .get(`${API_URL}/products/${productId}`)

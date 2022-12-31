@@ -29,10 +29,10 @@ const httpGetAllProducts = async (req, res) => {
   limit = Number(limit);
 
   const skip = (page - 1) * limit;
-
+console.log({ search, status, sort });
   const products = await getAllProducts(skip, limit, { search, status, sort });
   const productsCount = await getTotalCount({ search, status });
-
+console.log(products);
   res.status(200).json({
     data: { products },
     paging: {
