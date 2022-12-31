@@ -30,6 +30,7 @@ const httpGetAllProducts = async (req, res) => {
 
   const skip = (page - 1) * limit;
 console.log({ search, status, sort });
+console.log({ skip, limit });
   const products = await getAllProducts(skip, limit, { search, status, sort });
   const productsCount = await getTotalCount({ search, status });
 console.log(products);
