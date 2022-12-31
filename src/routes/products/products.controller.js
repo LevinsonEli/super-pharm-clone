@@ -23,10 +23,10 @@ const paginationValidator = require('../../validators/pagination.validator');
 const httpGetAllProducts = async (req, res) => {
   const { search, status, sort } = req.query;
   productsValidator.validate({ status, sort });
-  let { page, limit } = req.query;
-  paginationValidator.validate({ page, limit });
-  page = Number(page);
-  limit = Number(limit);
+  const { page, limit } = paginationValidator.getValidated({
+    page: req.query.page,
+    limit: req.query.limit,
+  });
 
   const skip = (page - 1) * limit;
 
