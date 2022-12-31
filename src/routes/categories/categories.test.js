@@ -7,9 +7,8 @@ const productsMongo = require('../../models/products/products.mongo');
 const app = require('../../app');
 
 const DB_URI =
-  process.env.ENV && process.env.ENV === TEST
-    ? process.env.MONGO_URI_TEST
-    : process.env.MONGO_URI || 'mongodb://localhost:27017/super-pharm-api-test';
+  process.env.MONGO_URI_TEST ||
+  'mongodb://localhost:27017/super-pharm-api-test';
 const API_URL = '/api/v1';
 
 describe('Testing categories API', () => {
