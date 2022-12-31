@@ -8,14 +8,15 @@ const {
 
 async function getAllProducts(skip, limit, queryObject) {
 
-  const { sort } = queryObject;
+  const { sort, numOfReviews } = queryObject;
   
   const filterObject = getFilterObject(queryObject);
 
   let result = productsMongo
     .find(filterObject)
-    .populate({ path: 'reviews', select: 'comment rating' })
     .populate({ path: 'category', select: 'title' });
+  if (numOfReviews)
+    result = result.populate({ path: 'reviews', select: 'comment rating', perDocumentLimit: numOfReviews })
 
   if (sort) {
     switch(sort) {
@@ -35,8 +36,12 @@ async function createProduct(title, price, category) {
   return await productsMongo.create({ title, price, category });
 }
 
-async function getProduct (id) {
-  const foundProduct = await productsMongo.findOne({ _id: id });
+async function getProduct (id, numOfReviews = 0) {
+  let result = productsMongo.findOne({ _id: id });
+  if (numOfReviews)
+    result = result.populate({ path: 'reviews', select: 'comment rating', perDocumentLimit: numOfReviews })
+
+  const foundProduct = await result;
   if (!foundProduct)
     throw new NotFoundError('Product not found');
   return foundProduct;

@@ -21,8 +21,8 @@ const productsValidator = require('../../validators/products.validator');
 const paginationValidator = require('../../validators/pagination.validator');
 
 const httpGetAllProducts = async (req, res) => {
-  const { search, status, sort } = req.query;
-  productsValidator.validate({ status, sort });
+  const { search, status, sort, numOfReviews } = req.query;
+  productsValidator.validate({ status, sort, numOfReviews });
   const { page, limit } = paginationValidator.getValidated({
     page: req.query.page,
     limit: req.query.limit,
@@ -30,7 +30,7 @@ const httpGetAllProducts = async (req, res) => {
 
   const skip = (page - 1) * limit;
 
-  const products = await getAllProducts(skip, limit, { search, status, sort });
+  const products = await getAllProducts(skip, limit, { search, status, sort, numOfReviews });
   const productsCount = await getTotalCount({ search, status });
 
   res.status(200).json({
@@ -65,9 +65,10 @@ const httpCreateProduct = async (req, res) => {
 const httpGetProduct = async (req, res) => {
 
   const { id } = req.params;
-  productsValidator.validate({ id });
+  const { numOfReviews } = req.query;
+  productsValidator.validate({ id, numOfReviews });
 
-  const foundProduct = await getProduct(id);
+  const foundProduct = await getProduct(id, numOfReviews);
 
   res.status(200).json(foundProduct);
 };
